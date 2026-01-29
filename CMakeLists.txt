@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(MonteCarlo_Monopoly main.cpp
         player.cpp
-        player.h)
+        player.h
+        Property.cpp
+        Property.h)
