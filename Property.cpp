@@ -1,2 +1,5 @@
+#include "property.h"
 
-#include "Property.h"
+bool Property::isOwned() const {
+    return owner != -1;
+}

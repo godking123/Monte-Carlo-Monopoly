@@ -1,20 +1,22 @@
-//
-// Created by rajit on 1/28/2026.
-//
-
 #ifndef PROPERTY_H
 #define PROPERTY_H
+#include <string>
 
 class Property {
 public:
+    std::string name;
     int cost;
     int position;
     int rent;
-    Property(const int newCost, const int newPosition, const int newRent) {
+    int owner;
+    Property(const std::string& newName, const int newCost, const int newPosition, const int newRent) {
+        name = newName;
         cost = newCost;
         position = newPosition;
         rent = newRent;
+        owner = -1;
     }
+    bool isOwned() const;
 };
 
 

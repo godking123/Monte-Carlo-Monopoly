@@ -7,4 +7,6 @@ add_executable(MonteCarlo_Monopoly main.cpp
         player.cpp
         player.h
         Property.cpp
-        Property.h)
+        Property.h
+        Board.cpp
+        Board.h)
