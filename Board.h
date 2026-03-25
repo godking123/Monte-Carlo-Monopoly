@@ -2,17 +2,18 @@
 #define BOARD_H
 
 #include <vector>
-#include "property.h"
+#include "Square.h"
+#include "Property.h"
+#include "CommunityChest.h"
 
 class Board {
 public:
-    std::vector<Property*> spaces;
+    std::vector<Square*> spaces;
 
     Board();
     ~Board();
 
-    Property* getPropertyAt(int position);
+    Square* getSquareAt(int position) const;
 };
-
 
 #endif

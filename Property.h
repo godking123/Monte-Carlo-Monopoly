@@ -1,27 +1,23 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
-#include <string>
 
-class Property {
+#include "Square.h"
+#include <string>
+class Player;
+
+class Property : public Square {
 public:
     std::string name;
-    int cost;
-    int position;
+    int price;
     int rent;
-    int owner;
-    Property(const std::string& newName, const int newCost, const int newPosition, const int newRent) {
-        name = newName;
-        cost = newCost;
-        position = newPosition;
-        rent = newRent;
-        owner = -1;
-    }
-    bool isOwned() const;
+    int houseCount;
+    Player* owner;
+
+    Property(std::string name, int price, int pos, int rent)
+        : Square(pos), name(std::move(name)),
+          price(price), rent(rent), houseCount(0), owner(nullptr) {}
+
+    void landOn(Player& player) override;
 };
 
-
-
-
-
-
-#endif //PROPERTY_H
+#endif // PROPERTY_H

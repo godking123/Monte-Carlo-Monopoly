@@ -1,5 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#include "Property.h"
+#include <vector>
 
 class Player {
 public:
@@ -7,9 +9,11 @@ public:
     int money;
     int position;
     bool bankrupt;
+    std::vector<Property*> ownedProperties;
+
 
     explicit Player(const int newID)
-        : ID(newID), money(0), position(0), bankrupt(false) {}
+        : ID(newID), money(1500), position(0), bankrupt(false) {}
 
     void move(int steps);
     void pay(int amount);
