@@ -1,6 +1,6 @@
 // Property.cpp
 #include "Property.h"
-#include "Player.h"
+#include "../../Player.h"
 
 void Property::landOn(Player& player) {
     if (owner == nullptr && player.money >= price) {

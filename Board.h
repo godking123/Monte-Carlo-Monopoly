@@ -2,9 +2,10 @@
 #define BOARD_H
 
 #include <vector>
-#include "Square.h"
-#include "Property.h"
-#include "CommunityChest.h"
+#include "SquareTypes/Square.h"
+#include "SquareTypes/Property/Property.h"
+#include "SquareTypes/Community Chest/CommunityChest.h"
+#include "SquareTypes/Chance/Chance.h"
 
 class Board {
 public:

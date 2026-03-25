@@ -6,12 +6,14 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(MonteCarlo_Monopoly main.cpp
         Player.cpp
         Player.h
-        Property.h
+        SquareTypes/Property/Property.h
         Board.cpp
         Board.h
         Dice.h
-        Square.h
-        Property.cpp
-        CommunityChest.cpp
-        CommunityChest.h
+        SquareTypes/Square.h
+        SquareTypes/Property/Property.cpp
+        "SquareTypes/Community Chest/CommunityChest.cpp"
+        "SquareTypes/Community Chest/CommunityChest.h"
+        SquareTypes/Chance/Chance.cpp
+        SquareTypes/Chance/Chance.h
 )

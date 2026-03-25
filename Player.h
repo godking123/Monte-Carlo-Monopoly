@@ -1,6 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "Property.h"
+#include "SquareTypes/Property/Property.h"
 #include <vector>
 
 class Player {

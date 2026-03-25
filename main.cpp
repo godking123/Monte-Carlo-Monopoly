@@ -3,7 +3,7 @@
 #include "Board.h"
 #include "Player.h"
 #include "Dice.h"
-#include "Property.h"
+#include "SquareTypes/Property/Property.h"
 
 int main() {
     std::cout << "Starting Monte Carlo Monopoly Simulation..." << std::endl;

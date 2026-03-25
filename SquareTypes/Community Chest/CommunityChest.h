@@ -4,7 +4,7 @@
 
 #ifndef COMMUNITYCHEST_H
 #define COMMUNITYCHEST_H
-#include "Square.h"
+#include "../Square.h"
 
 
 class CommunityChest : public Square {
@@ -15,7 +15,7 @@ public:
 
     CommunityChest(int pos, int move, int cost)
         : Square(pos), move(move), cost(cost) {}
-
+    ~CommunityChest() override = default;
     void landOn(Player& player) override;
 };
 

@@ -8,6 +8,11 @@ Board::Board() {
     spaces[17] = new CommunityChest(17, -3, 0);  // Space 17: e.g., move back 3 spaces
     spaces[33] = new CommunityChest(33, 0, -50); // Space 33: e.g., pay $50, don't move
 
+    // Chance
+    spaces[7] = new Chance(7, 0, 150);       // Space 7: e.g., gain $150, don't move
+    spaces[22] = new Chance(22, -3, 0);      // Space 22: e.g., move back 3 spaces
+    spaces[36] = new Chance(36, 0, -50);     // Space 36: e.g., pay $50, don't move
+
     // Brown
     spaces[1] = new Property("Mediterranean Avenue", 60, 1, 2);
     spaces[3] = new Property("Baltic Avenue", 60, 3, 4);
