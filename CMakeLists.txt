@@ -16,4 +16,8 @@ add_executable(MonteCarlo_Monopoly main.cpp
         "SquareTypes/Community Chest/CommunityChest.h"
         SquareTypes/Chance/Chance.cpp
         SquareTypes/Chance/Chance.h
+        SquareTypes/Jail/Jail.cpp
+        SquareTypes/Jail/Jail.h
+        SquareTypes/GoToJail/GoToJail.cpp
+        SquareTypes/GoToJail/GoToJail.h
 )

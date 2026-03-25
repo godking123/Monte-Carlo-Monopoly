@@ -6,6 +6,8 @@
 #include "SquareTypes/Property/Property.h"
 #include "SquareTypes/Community Chest/CommunityChest.h"
 #include "SquareTypes/Chance/Chance.h"
+#include "SquareTypes/Jail/Jail.h"
+#include "SquareTypes/GoToJail/GoToJail.h"
 
 class Board {
 public:

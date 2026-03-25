@@ -2,7 +2,9 @@
 
 Board::Board() {
     spaces.resize(40, nullptr);
-
+    //Jail/GoToJail
+    spaces[10] = new Jail(10);
+    spaces[30] = new GoToJail(30);
     // Community Chest
     spaces[2] = new CommunityChest(2, 0, 200);   // Space 2: e.g., gain $200, don't move
     spaces[17] = new CommunityChest(17, -3, 0);  // Space 17: e.g., move back 3 spaces

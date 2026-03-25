@@ -6,6 +6,6 @@
 #include "../../Player.h"
 
 void Chance::landOn(Player& player) {
-    player.move(move);
-    player.receive(cost);
+    player.position += move;
+    player.money += cost;
 }
