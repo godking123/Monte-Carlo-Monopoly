@@ -15,7 +15,7 @@ public:
     int pos;
 
     Chance(int pos, int move, int cost)
-        : Square(pos), move(move), cost(cost) {}
+        : Square(pos, "Chance"), move(move), cost(cost) {}
     ~Chance() override = default;
     void landOn(Player& player) override;
 };

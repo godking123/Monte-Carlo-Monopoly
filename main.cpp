@@ -4,28 +4,58 @@
 #include "Player.h"
 #include "Dice.h"
 #include "SquareTypes/Property/Property.h"
-#include "SquareTypes/GoToJail/GoToJail.h"
-#include "SquareTypes/Jail/Jail.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+// ANSI color codes for terminal output
+namespace TerminalColors {
+    const std::string RESET   = "\033[0m";
+    const std::string RED     = "\033[31m";
+    const std::string GREEN   = "\033[32m";
+    const std::string YELLOW  = "\033[33m";
+    const std::string BLUE    = "\033[34m";
+    const std::string MAGENTA = "\033[35m";
+    const std::string CYAN    = "\033[36m";
+    const std::string GRAY    = "\033[90m";
+    const std::string BOLD    = "\033[1m";
+}
 
 int main()
-{
-    std::cout << "Starting Monte Carlo Monopoly Simulation..." << std::endl;
+    {
+    #ifdef _WIN32
+        // enable ANSI escape codes on Windows
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD dwMode = 0;
+        GetConsoleMode(hOut, &dwMode);
+        SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    #endif
+    using namespace TerminalColors;
+
+    std::cout << BOLD << MAGENTA << "===========================================" << RESET << std::endl;
+    std::cout << BOLD << CYAN    << "  Starting Monte Carlo Monopoly Simulation" << RESET << std::endl;
+    std::cout << BOLD << MAGENTA << "===========================================\n" << RESET << std::endl;
+
     Board board;
     Dice dice;
     int numPlayers = 4;
     std::vector<Player> players;
     for (int i = 0; i < numPlayers; ++i)
     {
-        players.push_back(Player(i));
+        players.emplace_back(i);
     }
 
     int turns = 50;
     for (int t = 1; t <= turns; ++t)
     {
+        std::cout << BOLD << BLUE << "\n--- Turn " << t << " ---" << RESET << std::endl;
+
         for (auto& player : players)
         {
-            // Bankruptcy Checkk
+            // Bankruptcy Check
             if (player.bankrupt) continue;
+
             // Jail Check
             if (player.inJail) {
                 // Roll for doubles first
@@ -36,7 +66,7 @@ int main()
                     player.inJail = false;
                     player.turnsInJail = 0;
                     player.move(roll1 + roll2);
-                    std::cout << "Player " << player.ID << " rolled doubles, out of jail!" << std::endl;
+                    std::cout << GREEN << "  [Jail] Player " << player.ID << " rolled doubles, out of jail!" << RESET << std::endl;
                 } else {
                     // no doubles, serve the turn
                     player.turnsInJail++;
@@ -45,9 +75,9 @@ int main()
                         player.pay(50);
                         player.inJail = false;
                         player.turnsInJail = 0;
-                        std::cout << "Player " << player.ID << " paid $50 fine, out of jail." << std::endl;
+                        std::cout << YELLOW << "  [Jail] Player " << player.ID << " paid $50 fine, out of jail." << RESET << std::endl;
                     } else {
-                        std::cout << "Player " << player.ID << " stuck in jail, turn " << player.turnsInJail << std::endl;
+                        std::cout << RED << "  [Jail] Player " << player.ID << " stuck in jail, turn " << player.turnsInJail << RESET << std::endl;
                     }
                 }
                 continue;
@@ -55,47 +85,57 @@ int main()
 
             if (player.bankrupt) continue;
             int roll = dice.rollTwo();
+            player.currDiceRoll = roll;
             player.move(roll);
             auto* space = board.getSquareAt(player.position);
 
             if (space != nullptr)
             {
                 space->landOn(player);
-                // Bankruptcy Checkk
+
+                // Bankruptcy Check
                 if (player.money < 0)
                 {
                     player.bankrupt = true;
-                    for (auto* prop : player.ownedProperties)
+                    player.numUtilities = 0;
+                    player.numRailroads = 0;
+                    for (Square* square : player.ownedProperties)
                     {
-                        prop->owner = nullptr;
+                        square->clearOwner();
                     }
                     player.ownedProperties.clear();
+                    std::cout << BOLD << RED << "\n  !!! Player " << player.ID << " HAS GONE BANKRUPT !!!\n" << RESET << std::endl;
                 }
             }
         }
     }
 
-    std::cout << "\nSimulation ended after " << turns << " turns." << std::endl;
-    std::cout << "Final Results:" << std::endl;
+    std::cout << "\n" << BOLD << MAGENTA << "===========================================" << RESET << std::endl;
+    std::cout << BOLD << CYAN << "  Simulation ended after " << turns << " turns." << RESET << std::endl;
+    std::cout << BOLD << MAGENTA << "===========================================" << RESET << std::endl;
+
+    std::cout << BOLD << YELLOW << "\nFinal Results:" << RESET << std::endl;
     for (const auto& player : players)
     {
-        std::cout << "Player " << player.ID
-            << " - Money: $" << player.money
-            << (player.bankrupt ? " (Bankrupt)" : "") << std::endl;
+        std::string statusColor = player.bankrupt ? RED : GREEN;
+
+        std::cout << BOLD << "Player " << player.ID << RESET
+                  << " - Money: " << statusColor << "$" << player.money << RESET
+                  << (player.bankrupt ? (RED + " (Bankrupt)" + RESET) : "") << std::endl;
 
         if (player.ownedProperties.empty())
         {
-            std::cout << "  No properties owned." << std::endl;
+            std::cout << "  " << GRAY << "No properties owned." << RESET << std::endl;
         }
         else
         {
             std::cout << "  Properties:" << std::endl;
             for (const auto* prop : player.ownedProperties)
             {
-                std::cout << "    - " << prop->name
-                    << " (rent: $" << prop->rent << ")" << std::endl;
+                std::cout << CYAN << "    - " << prop->name << RESET << std::endl;
             }
         }
+        std::cout << GRAY << "-------------------------------------------" << RESET << std::endl;
     }
     return 0;
 }

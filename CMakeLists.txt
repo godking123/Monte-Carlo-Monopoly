@@ -20,4 +20,10 @@ add_executable(MonteCarlo_Monopoly main.cpp
         SquareTypes/Jail/Jail.h
         SquareTypes/GoToJail/GoToJail.cpp
         SquareTypes/GoToJail/GoToJail.h
+        SquareTypes/Property/Utility.cpp
+        SquareTypes/Property/Utility.h
+        SquareTypes/Property/Railroad.cpp
+        SquareTypes/Property/Railroad.h
+        SquareTypes/Taxes/LuxuryTax.h
+        SquareTypes/Taxes/IncomeTax.h
 )

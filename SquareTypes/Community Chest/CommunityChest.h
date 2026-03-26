@@ -14,7 +14,7 @@ public:
     int pos;
 
     CommunityChest(int pos, int move, int cost)
-        : Square(pos), move(move), cost(cost) {}
+        : Square(pos, "Community Chest"), move(move), cost(cost) {}
     ~CommunityChest() override = default;
     void landOn(Player& player) override;
 };

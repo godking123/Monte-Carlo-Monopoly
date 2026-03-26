@@ -9,7 +9,7 @@
 
 class GoToJail : public Square {
 public:
-    explicit GoToJail(int pos) : Square(pos) {}
+    explicit GoToJail(int pos) : Square(pos, "GoToJail") {}
     ~GoToJail() override = default;
 
     void landOn(Player &player) override;
