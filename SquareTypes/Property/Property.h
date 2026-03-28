@@ -11,16 +11,16 @@ class Property : public Square {
 public:
     std::string name;
     int price;
-    int rent;
     int houseCount;
-    int houseCost{};
-    std::vector<int> housePrices; // Index 0: Normal Rent -> Index 1: 1 House Rent -> Index 5: Hotel Rent
+    int houseCost;
+    std::string color;
+    std::vector<int> rents; // Index 0: Normal Rent -> Index 1: 1 House Rent -> Index 5: Hotel Rent
     Player* owner;
 
-    Property(std::string name, int price, int pos, int rent, std::vector<int> housePrices, int houseCost)
+    Property(std::string name, int price, int pos, std::vector<int> rents, int houseCost, std::string color)
         : Square(pos, name), name(std::move(name)),
-          price(price), rent(rent), houseCount(0), owner(nullptr), 
-          housePrices(std::move(housePrices)), houseCost(houseCost) {}
+          price(price), houseCount(0), owner(nullptr),
+          rents(std::move(rents)), houseCost(houseCost), color(std::move(color)) {}
     ~Property() override = default;
     void landOn(Player& player) override;
     void clearOwner() override

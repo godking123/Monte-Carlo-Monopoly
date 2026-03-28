@@ -1,7 +1,3 @@
-//
-// Created by rajit on 3/25/2026.
-//
-
 #ifndef COMMUNITYCHEST_H
 #define COMMUNITYCHEST_H
 #include "../Square.h"
@@ -18,8 +14,4 @@ public:
     ~CommunityChest() override = default;
     void landOn(Player& player) override;
 };
-
-
-
-
 #endif //COMMUNITYCHEST_H

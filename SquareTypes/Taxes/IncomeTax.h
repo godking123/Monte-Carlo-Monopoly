@@ -6,6 +6,7 @@
 
 #include "../Square.h"
 #include "../../Player.h"
+#include "../../TerminalColors.h"
 
 class IncomeTax : public Square
 {
@@ -18,10 +19,10 @@ public:
         if (player.money < 1000) {
             int currTax = 0.2 * player.money;
             player.pay(currTax);
-            std::cout << "Income Tax Paid (" << currTax << ")" << std::endl;
+            std::cout << TerminalColors::RESET << "[Income Tax] " << "Player " << player.ID << " paid " << currTax << " for income tax." << std::endl;
         } else {
             player.pay(200);
-            std::cout << "Income Tax Paid (200)" << std::endl;
+            std::cout << TerminalColors::RESET << "[Income Tax] " << "Player " << player.ID << " paid 200 for income tax." << std::endl;
         }
     };
 };
