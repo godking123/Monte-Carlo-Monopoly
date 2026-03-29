@@ -27,4 +27,5 @@ add_executable(MonteCarlo_Monopoly main.cpp
         SquareTypes/Taxes/LuxuryTax.h
         SquareTypes/Taxes/IncomeTax.h
         TerminalColors.h
+        SquareTypes/Card.h
 )

@@ -55,28 +55,35 @@ int main()
 
             // Jail Check
             if (player.inJail) {
-                // Roll for doubles first
-                int roll1 = dice.roll();
-                int roll2 = dice.roll();
-                player.currDiceRoll = roll1 + roll2;
-
-                if (roll1 == roll2) {
-                    // rolled doubles, get out free
+                if (player.hasGetOutOfJail) {
                     player.inJail = false;
                     player.turnsInJail = 0;
-                    std::cout << GREEN << "  [Jail] Player " << player.ID << " rolled doubles, out of jail!" << RESET << std::endl;
+                    player.hasGetOutOfJail = false;
+                    std::cout << GREEN << "  [Jail] Player " << player.ID
+                              << " used Get Out of Jail Free card!" << RESET << std::endl;
                 } else {
-                    // no doubles, serve the turn
-                    player.turnsInJail++;
-                    if (player.turnsInJail >= 3) {
-                        // served 3 turns, must pay fine
-                        player.pay(50);
+                    int roll1 = dice.roll();
+                    int roll2 = dice.roll();
+                    player.currDiceRoll = roll1 + roll2;
+
+                    if (roll1 == roll2) {
                         player.inJail = false;
                         player.turnsInJail = 0;
-                        std::cout << YELLOW << "  [Jail] Player " << player.ID << " paid $50 fine, out of jail." << RESET << std::endl;
+                        std::cout << GREEN << "  [Jail] Player " << player.ID
+                                  << " rolled doubles, out of jail!" << RESET << std::endl;
                     } else {
-                        std::cout << RED << "  [Jail] Player " << player.ID << " stuck in jail, turn " << player.turnsInJail << RESET << std::endl;
-                        skipMovement = true; // FIX 2: Only skip movement if they are still stuck in jail
+                        player.turnsInJail++;
+                        if (player.turnsInJail >= 3) {
+                            player.pay(50);
+                            player.inJail = false;
+                            player.turnsInJail = 0;
+                            std::cout << YELLOW << "  [Jail] Player " << player.ID
+                                      << " paid $50 fine, out of jail." << RESET << std::endl;
+                        } else {
+                            std::cout << RED << "  [Jail] Player " << player.ID
+                                      << " stuck in jail, turn " << player.turnsInJail << RESET << std::endl;
+                            skipMovement = true;
+                        }
                     }
                 }
             } else {
@@ -90,7 +97,7 @@ int main()
 
                 if (space != nullptr)
                 {
-                    space->landOn(player);
+                    space->landOn(player, players, board);
 
                     // Bankruptcy Check
                     if (player.money < 0) {
@@ -101,7 +108,10 @@ int main()
                         player.colorMap.clear();
                         for (Square* square : player.ownedProperties) {
                             square->clearOwner();
+                            square->clearHouses();
                         }
+                        player.ownedRailroads.clear();
+                        player.ownedUtilities.clear();
                         player.ownedProperties.clear();
                         std::cout << BOLD << RED << "\n  !!! Player " << player.ID << " HAS GONE BANKRUPT !!!\n" << RESET << std::endl;
                     }
@@ -143,6 +153,16 @@ int main()
             for (const auto* prop : player.ownedProperties)
             {
                 std::cout << CYAN << "    - " << prop->name << RESET << std::endl;
+            }
+            std::cout << "  Railroads: " << player.numRailroads + 1 << std::endl;
+            for (const auto* railroad : player.ownedRailroads)
+            {
+                std::cout << BLACK << "    - " << railroad->name << RESET << std::endl;
+            }
+            std::cout << "  Utilities: " << player.numUtilities << std::endl;
+            for (const auto* utility : player.ownedUtilities)
+            {
+                std::cout << YELLOW << "    - " << utility->name << RESET << std::endl;
             }
 
             std::cout << "  Color Sets:" << std::endl;

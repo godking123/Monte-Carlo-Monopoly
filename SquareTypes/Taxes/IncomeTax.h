@@ -3,10 +3,11 @@
 #define INCOMETAX_H
 #include <iostream>
 #include <ostream>
-
 #include "../Square.h"
 #include "../../Player.h"
 #include "../../TerminalColors.h"
+
+class Board;
 
 class IncomeTax : public Square
 {
@@ -14,7 +15,7 @@ public:
     explicit IncomeTax(int pos) : Square(pos, "Income Tax") {}
     ~IncomeTax() override = default;
 
-    void landOn(Player& player) override
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override
     {
         if (player.money < 1000) {
             int currTax = 0.2 * player.money;

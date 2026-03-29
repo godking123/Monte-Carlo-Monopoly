@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-void GoToJail::landOn(Player& player)
+void GoToJail::landOn(Player& player, std::vector<Player>& players, Board& board)
 {
     #ifdef _WIN32
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);

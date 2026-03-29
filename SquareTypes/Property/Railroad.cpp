@@ -7,7 +7,7 @@
 #include <windows.h>
 #endif
 
-void Railroad::landOn(Player& player)
+void Railroad::landOn(Player& player, std::vector<Player>& players, Board& board)
 {
     #ifdef _WIN32
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -20,7 +20,7 @@ void Railroad::landOn(Player& player)
     if (owner == nullptr && player.money >= price) {
         owner = &player;
         owner->numRailroads++;
-        player.ownedProperties.push_back(this);
+        player.ownedRailroads.push_back(this);
         player.pay(price);
         std::cout << BLACK << "[Railroad] " << RESET << "Player " << player.ID << " bought the Railroad (" << name << ") for $" << price << ". They now own " << (owner->numRailroads + 1) << " railroad(s). Remaining money: $" << RED << player.money << RESET << std::endl;
     }

@@ -12,7 +12,7 @@ public:
     explicit Jail(int pos) : Square(pos, "Jail") {}
     ~Jail() override = default;
 
-    void landOn(Player& player) override;
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override;
 };
 
 

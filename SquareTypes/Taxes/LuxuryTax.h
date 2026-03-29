@@ -9,13 +9,15 @@
 #include <windows.h>
 #endif
 
+class Board;
+
 class LuxuryTax : public Square
 {
 public:
     explicit LuxuryTax(int pos) : Square(pos, "Income Tax") {}
     ~LuxuryTax() override = default;
 
-    void landOn(Player& player) override
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override
     {
 
         #ifdef _WIN32

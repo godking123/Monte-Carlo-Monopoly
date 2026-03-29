@@ -12,7 +12,7 @@ public:
     explicit Utility(const std::string& name, int pos) : Square(pos, name), price(150), name(name), owner(nullptr) {}
     ~Utility() override = default;
 
-    void landOn(Player& player) override;
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override;
     void clearOwner() override
     {
         owner = nullptr;

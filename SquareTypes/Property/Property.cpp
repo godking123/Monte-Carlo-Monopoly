@@ -8,7 +8,7 @@
 #endif
 
 
-void Property::landOn(Player& player) {
+void Property::landOn(Player& player, std::vector<Player>& players, Board& board) {
 
     #ifdef _WIN32
         // enable ANSI escape codes on Windows
@@ -29,6 +29,9 @@ void Property::landOn(Player& player) {
     }
     // If owned by someone else, pay rent
     else if (owner != nullptr && owner != &player) {
+        if (mortgaged) {
+            return;
+        }
         int currentRent;
         if (houseCount == 0 && owner->checkColorMap(color)) {
             currentRent = rents[0]*2;

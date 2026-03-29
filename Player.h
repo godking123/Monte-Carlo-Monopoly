@@ -4,6 +4,8 @@
 #include <unordered_map>
 
 #include "SquareTypes/Property/Property.h"
+#include "SquareTypes/Property/Railroad.h"
+#include "SquareTypes/Property/Utility.h"
 #include <vector>
 
 class Player {
@@ -17,9 +19,12 @@ public:
     int numRailroads;
     int numUtilities;
     int currDiceRoll;
+    bool hasGetOutOfJail;
     int turnsInJail; // In simple monopoly 3 turns must be spent in jail
     std::unordered_map<std::string, std::set<Property*>> colorMap;
-    std::vector<Square*> ownedProperties;
+    std::vector<Property*> ownedProperties;
+    std::vector<Railroad*> ownedRailroads;
+    std::vector<Utility*> ownedUtilities;
 
 
    explicit Player(const int newID)
@@ -34,7 +39,7 @@ public:
           {"Yellow", {}},
           {"Green", {}},
           {"Dark Blue", {}}
-      }) {}
+      }), hasGetOutOfJail(false) {}
     ~Player() = default;
 
     void move(int steps);

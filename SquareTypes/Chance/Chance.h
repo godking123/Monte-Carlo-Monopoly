@@ -1,23 +1,20 @@
-//
-// Created by rajit on 3/25/2026.
-//
-
+// Chance.h
 #ifndef CHANCE_H
 #define CHANCE_H
 #include "../Square.h"
+#include "../Card.h"
+#include <vector>
 
+class Board;
 
-class Chance : public Square{
-
+class Chance : public Square {
 public:
-    int move;
-    int cost;
-    int pos;
+    std::vector<Card> deck;
+    int currentCard;
 
-    Chance(int pos, int move, int cost)
-        : Square(pos, "Chance"), move(move), cost(cost) {}
+    explicit Chance(int pos);
     ~Chance() override = default;
-    void landOn(Player& player) override;
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override;
+    void clearOwner() override {}
 };
-
 #endif //CHANCE_H

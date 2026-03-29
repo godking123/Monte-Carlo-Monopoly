@@ -1,17 +1,19 @@
+// CommunityChest.h
 #ifndef COMMUNITYCHEST_H
 #define COMMUNITYCHEST_H
 #include "../Square.h"
-
+#include "../Card.h"
+#include <vector>
 
 class CommunityChest : public Square {
 public:
-    int move;
-    int cost;
-    int pos;
+    std::vector<Card> deck;
+    int currentCard;
 
-    CommunityChest(int pos, int move, int cost)
-        : Square(pos, "Community Chest"), move(move), cost(cost) {}
+    explicit CommunityChest(int pos);
     ~CommunityChest() override = default;
-    void landOn(Player& player) override;
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override;
+    void clearOwner() override {}
 };
+
 #endif //COMMUNITYCHEST_H

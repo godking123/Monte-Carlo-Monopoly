@@ -8,7 +8,7 @@
 
 
 
-void Utility::landOn(Player& player)
+void Utility::landOn(Player& player, std::vector<Player>& players, Board& board)
 {
     #ifdef _WIN32
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -21,7 +21,7 @@ void Utility::landOn(Player& player)
     if (owner == nullptr && player.money >= price) {
         owner = &player;
         owner->numUtilities++;
-        player.ownedProperties.push_back(this);
+        player.ownedUtilities.push_back(this);
         player.pay(price);
         std::cout << YELLOW << "[Utility]" << RESET << " Player " << player.ID << " bought the Utility (" << name << ") for $" << price << ". They now own " << owner->numUtilities << " utilitie(s)." << std::endl;
     }

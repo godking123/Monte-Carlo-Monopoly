@@ -13,6 +13,7 @@ public:
     int price;
     int houseCount;
     int houseCost;
+    bool mortgaged;
     std::string color;
     std::vector<int> rents; // Index 0: Normal Rent -> Index 1: 1 House Rent -> Index 5: Hotel Rent
     Player* owner;
@@ -22,11 +23,15 @@ public:
           price(price), houseCount(0), owner(nullptr),
           rents(std::move(rents)), houseCost(houseCost), color(std::move(color)) {}
     ~Property() override = default;
-    void landOn(Player& player) override;
-    void clearOwner() override
-    {
+
+    void landOn(Player& player, std::vector<Player>& players, Board& board) override;
+    void clearOwner() override {
         owner = nullptr;
     }
+    void clearHouses() override {
+        houseCount = 0;
+    }
+
 };
 
 #endif // PROPERTY_H
