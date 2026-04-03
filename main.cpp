@@ -5,6 +5,7 @@
 #include "Dice.h"
 #include "SquareTypes/Property/Property.h"
 #include "TerminalColors.h"
+#include "Trading.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -125,6 +126,10 @@ int main()
                         player.autoBuyHouse(prop);
                     }
                 }
+            }
+
+            if (Trading::allPropertiesBought(players)) {
+                Trading::executeTrades(players);
             }
         }
         turns++;
