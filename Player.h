@@ -25,10 +25,11 @@ public:
     std::vector<Property*> ownedProperties;
     std::vector<Railroad*> ownedRailroads;
     std::vector<Utility*> ownedUtilities;
+    float alpha;
 
 
-   explicit Player(const int newID)
-    : ID(newID), money(1500), position(0), bankrupt(false),
+   explicit Player(const int newID, int startingMoney = 1500, float alphaValue = 0.5f)
+    : ID(newID), money(startingMoney), position(0), bankrupt(false), alpha(alphaValue),
       inJail(false), turnsInJail(0), numRailroads(-1), numUtilities(0), currDiceRoll(0),
       colorMap({
           {"Brown", {}},

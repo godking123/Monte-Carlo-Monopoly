@@ -11,9 +11,9 @@
 struct TradeOffer {
     Player* buyer;
     Player* seller;
-    Property* desired;           // what buyer wants
-    Property* offered;           // property buyer offers in return (can be nullptr)
-    int cashTop;                 // positive = buyer pays seller, negative = seller pays buyer
+    Property* desired;
+    Property* offered;
+    int cashTop;
 };
 
 class Trading {

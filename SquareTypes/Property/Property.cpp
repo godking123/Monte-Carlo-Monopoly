@@ -19,13 +19,29 @@ void Property::landOn(Player& player, std::vector<Player>& players, Board& board
     #endif
     using namespace TerminalColors;
 
-    if (owner == nullptr && player.money >= price) {
-        // Buys property, adding colors to colorSet and numColors to hashMap
-        owner = &player;
-        player.ownedProperties.push_back(this);
-        player.pay(price);
-        player.colorMap[color].insert(this);
-        std::cout << MAGENTA << "[Property] " << RESET << "Player " << player.ID << " bought the Property (" << name << ") for $" << price << ". Remaining money: $" << RED << player.money << std::endl;
+    if (owner == nullptr) {
+        bool shouldBuy = false;
+        if (player.ID == 0) {
+            if (color == "Red" || color == "Orange") {
+                if (player.money >= price) shouldBuy = true;
+            } else {
+                float safetyNet = 1500.0f * (1.0f - player.alpha);
+                if ((player.money - price) > safetyNet && player.money >= price) shouldBuy = true;
+            }
+        } else {
+            if (player.money >= price) shouldBuy = true;
+        }
+
+        if (shouldBuy) {
+            // Buys property, adding colors to colorSet and numColors to hashMap
+            owner = &player;
+            player.ownedProperties.push_back(this);
+            player.pay(price);
+            player.colorMap[color].insert(this);
+            std::cout << MAGENTA << "[Property] " << RESET << "Player " << player.ID << " bought the Property (" << name << ") for $" << price << ". Remaining money: $" << RED << player.money << std::endl;
+        } else {
+            std::cout << MAGENTA << "[Property]" << RESET << " Player " << player.ID << " declined or could not afford to buy this Property. (Price: $" << price << ", Has: $" << player.money << ")" << std::endl;
+        }
     }
     // If owned by someone else, pay rent
     else if (owner != nullptr && owner != &player) {

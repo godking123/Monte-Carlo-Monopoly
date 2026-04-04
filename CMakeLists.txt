@@ -30,3 +30,4 @@ add_executable(MonteCarlo_Monopoly main.cpp
         SquareTypes/Card.h
         Trading.h
 )
+set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")

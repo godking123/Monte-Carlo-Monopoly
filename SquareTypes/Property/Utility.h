@@ -8,8 +8,9 @@ public:
     int price;
     std::string name;
     Player* owner;
+    bool mortgaged;
 
-    explicit Utility(const std::string& name, int pos) : Square(pos, name), price(150), name(name), owner(nullptr) {}
+    explicit Utility(const std::string& name, int pos) : Square(pos, name), price(150), name(name), owner(nullptr), mortgaged(false) {}
     ~Utility() override = default;
 
     void landOn(Player& player, std::vector<Player>& players, Board& board) override;

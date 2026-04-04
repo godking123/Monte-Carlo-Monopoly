@@ -27,6 +27,7 @@ void Utility::landOn(Player& player, std::vector<Player>& players, Board& board)
     }
     // If owned by someone else, pay rent
     else if (owner != nullptr && owner != &player) {
+        if (mortgaged) return;
         // Current Rent is Based off of numUtilities owned
         int currentRent = 0;
         if (owner->numUtilities == 1) {
