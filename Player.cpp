@@ -2,7 +2,7 @@
 #include "Player.h"
 
 #include <iostream>
-#include <bits/ostream.tcc>
+#include <ostream>
 
 void Player::pay(const int amount) {
     money -= amount;

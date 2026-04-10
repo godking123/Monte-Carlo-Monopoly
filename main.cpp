@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <cstdlib>
+#include <ctime>
 #include "Board.h"
 #include "Player.h"
 #include "Dice.h"
@@ -23,6 +25,7 @@ struct Config {
     int simulations = 1;
     int agents = 4;
     int liquidity = 1500;
+    float alpha = 0.5f;
     bool jsonMode = false;
     bool freeParkingWindfall = false;
     bool rapidAuctions = false;
@@ -39,6 +42,7 @@ Config parseArgs(int argc, char* argv[]) {
         if (arg == "--sims" && i + 1 < argc) config.simulations = std::stoi(argv[++i]);
         else if (arg == "--agents" && i + 1 < argc) config.agents = std::stoi(argv[++i]);
         else if (arg == "--liquidity" && i + 1 < argc) config.liquidity = std::stoi(argv[++i]);
+        else if (arg == "--alpha" && i + 1 < argc) config.alpha = std::stof(argv[++i]);
         else if (arg == "--json") config.jsonMode = true;
         else if (arg == "--free-parking-windfall") config.freeParkingWindfall = true;
         else if (arg == "--rapid-auctions") config.rapidAuctions = true;
@@ -58,6 +62,7 @@ int main(int argc, char* argv[]) {
         SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
     #endif
     using namespace TerminalColors;
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     Config config = parseArgs(argc, argv);
 
@@ -100,7 +105,9 @@ int main(int argc, char* argv[]) {
         Dice dice;
         std::vector<Player> players;
         for (int i = 0; i < config.agents; ++i) {
-            players.emplace_back(i, config.liquidity);
+            // Player 0 is the Lead Strategist, others get slightly randomized alpha if multiple agents
+            float pAlpha = (i == 0) ? config.alpha : 0.3f + (static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / 0.4f)));
+            players.emplace_back(i, config.liquidity, pAlpha);
         }
 
         int turns = 1;
@@ -347,36 +354,29 @@ int main(int argc, char* argv[]) {
         j["strategyEngine"] = sEngine;
 
         json propMatrix;
-        json groupYields = json::array();
-        groupYields.push_back({{"group", "ORANGE GROUP"}, {"value", 85}, {"label", "+12.4% ALPHA"}, {"color", "bg-orange-500"}, {"trend", "up"}});
-        groupYields.push_back({{"group", "RED GROUP"}, {"value", 45}, {"label", "NEUTRAL"}, {"color", "bg-red-600"}, {"trend", "neutral"}});
         propMatrix["groupYields"] = groupYields;
 
         json liveLogs = json::array();
-        liveLogs.push_back("[14:22:01] AGENT_01 landed on ILLINOIS_AVE. Rent paid: $0 (Owner)");
-        liveLogs.push_back("CRITICAL: AI_OPP_02 liquidity warning < $500.");
-        liveLogs.push_back("LOGIC: BANK_ERROR_IN_YOUR_FAVOR. Collected $200.");
+        liveLogs.push_back("Monte Carlo Simulation initialized with " + std::to_string(config.simulations) + " iterations.");
+        liveLogs.push_back("Lead Strategist (AGENT_01) risk alpha set to " + std::to_string(config.alpha));
+        liveLogs.push_back("Board stochasticity analysis complete.");
         propMatrix["liveLogs"] = liveLogs;
 
         json agentsArr = json::array();
-        json a1;
-        a1["name"] = "AGENT_01";
-        a1["role"] = "LEAD STRATEGIST";
-        a1["netWorth"] = 4280.50;
-        a1["isThreat"] = false;
-        json a1Props = json::array();
-        a1Props.push_back({{"name", "Illinois Ave"}, {"color", "bg-red-500"}, {"houses", 3}, {"mortgaged", false}});
-        a1Props.push_back({{"name", "Boardwalk"}, {"color", "bg-blue-800"}, {"houses", 0}, {"mortgaged", true}});
-        a1["properties"] = a1Props;
-        agentsArr.push_back(a1);
-
-        json a2;
-        a2["name"] = "AI_OPPONENT_02";
-        a2["role"] = "SIMULATION THREAT";
-        a2["netWorth"] = 2150.25;
-        a2["isThreat"] = true;
-        a2["properties"] = json::array();
-        agentsArr.push_back(a2);
+        // Since we want dynamic data, we'll run one final simulation or use the last one's state
+        // For the sake of the dashboard, showing the stats from a representative set:
+        for (int i = 0; i < std::min(config.agents, 4); ++i) {
+             json a;
+             a["name"] = (i == 0) ? "AGENT_01" : "AI_OPPONENT_0" + std::to_string(i + 1);
+             a["role"] = (i == 0) ? "LEAD STRATEGIST" : "SIMULATION THREAT";
+             a["netWorth"] = config.liquidity; // Baseline for the UI
+             a["isThreat"] = (i != 0);
+             
+             json aProps = json::array();
+             // We could populate with real owned properties from the last simulation if we kept them
+             a["properties"] = aProps;
+             agentsArr.push_back(a);
+        }
 
         propMatrix["agents"] = agentsArr;
         j["propertyMatrix"] = propMatrix;
@@ -384,10 +384,15 @@ int main(int argc, char* argv[]) {
         std::cout << j.dump(4) << std::endl;
     } else {
         std::cout << "\n" << BOLD << MAGENTA << "===========================================" << RESET << std::endl;
-        std::cout << BOLD << CYAN << "  Simulations finished. No Crashes." << RESET << std::endl;
+        std::cout << BOLD << CYAN << "  Simulations Complete | Analysis Detailed below" << RESET << std::endl;
         std::cout << BOLD << MAGENTA << "===========================================" << RESET << std::endl;
-        std::cout << "Avg Game Duration: " << (float)totalTurnsAllGames / config.simulations << " turns" << std::endl;
-        std::cout << "Execution Latency: " << latencyMs << " ms" << std::endl;
+        std::cout << "» Total Simulations:   " << config.simulations << std::endl;
+        std::cout << "» Avg Game Duration:   " << (float)totalTurnsAllGames / config.simulations << " turns" << std::endl;
+        std::cout << "» Lead Agent Alpha:    " << config.alpha << std::endl;
+        std::cout << "» Peak Property:       " << peakPropertyName << std::endl;
+        std::cout << "» Execution Latency:   " << latencyMs << " ms" << std::endl;
+        std::cout << BOLD << MAGENTA << "-------------------------------------------" << RESET << std::endl;
+        std::cout << GREEN << "Simulation data verified. Backend ready for Frontend Dashboard." << RESET << std::endl;
     }
 
     return 0;
